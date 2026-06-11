@@ -74,7 +74,7 @@
   .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 20px; border: none; border-radius: 10px; font-family: "Figtree", sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.2s; }
   .share-btn:hover { opacity: 0.88; transform: translateY(-2px); }
   .share-btn-square { background: linear-gradient(135deg, var(--purple), var(--purple-light)); color: #fff; box-shadow: 0 4px 14px rgba(100,11,155,0.25); }
-  .share-btn-story  { background: linear-gradient(135deg, var(--teal), #009e88); color: #fff; box-shadow: 0 4px 14px rgba(0,185,159,0.25); }
+
 </style>
 </head>
 <body>
@@ -123,7 +123,6 @@
       <div class="share-title">Compartilhar resultado</div>
       <div class="share-btns">
         <button class="share-btn share-btn-square" onclick="downloadImage('square')">⬇ Baixar 1080×1080</button>
-        <button class="share-btn share-btn-story"  onclick="downloadImage('story')">⬇ Baixar 1080×1350</button>
       </div>
     </div>
         <button class="restart-btn" onclick="location.reload()">↺ &nbsp;Refazer o quiz</button>
@@ -440,97 +439,90 @@ function roundRect(ctx, x, y, w, h, r) {
 function downloadImage(format) {
   var r = results[winnerKey];
   var W = 1080;
-  var H = format === "story" ? 1350 : 1080;
+  var H = 1080;
   var canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
   var ctx = canvas.getContext("2d");
 
-  var grad = ctx.createLinearGradient(0, 0, W, H);
-  grad.addColorStop(0, "#1a0030");
-  grad.addColorStop(0.5, "#2d0060");
-  grad.addColorStop(1, "#0a2a2a");
-  ctx.fillStyle = grad;
+  // Background #640b9b
+  ctx.fillStyle = "#640b9b";
   ctx.fillRect(0, 0, W, H);
 
-  ctx.beginPath();
-  ctx.arc(W + 80, -80, 380, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(100,11,155,0.25)";
-  ctx.fill();
+  var padX = 80;
+  var curY = 90;
 
-  ctx.beginPath();
-  ctx.arc(-60, H + 60, 320, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(0,185,159,0.18)";
-  ctx.fill();
-
-  var barGrad = ctx.createLinearGradient(0, 0, W, 0);
-  barGrad.addColorStop(0, "#640b9b");
-  barGrad.addColorStop(1, "#00b99f");
-  ctx.fillStyle = barGrad;
-  ctx.fillRect(0, 0, W, 10);
-
-  var padX = 96;
-  var curY = format === "story" ? 200 : 160;
-
-  ctx.font = "bold 30px Arial";
-  ctx.fillStyle = "#00b99f";
+  // Logo bulb + LIVRES
+  ctx.font = "bold 38px Figtree, Arial";
+  ctx.fillStyle = "#ffffff";
   ctx.textAlign = "left";
-  ctx.fillText("LIVRES", padX, curY);
-  curY += 56;
+  ctx.fillText("✦ LIVRES", padX, curY);
+  curY += 100;
 
-  ctx.font = "400 36px Arial";
-  ctx.fillStyle = "rgba(255,255,255,0.65)";
-  ctx.fillText("Descobri que sou", padX, curY);
-  curY += 70;
-
-  var titleFontSize = r.title.length > 14 ? 76 : 96;
-  ctx.font = "bold " + titleFontSize + "px Arial";
+  // Profile title
+  var titleFontSize = r.title.length > 14 ? 90 : 110;
+  ctx.font = "900 " + titleFontSize + "px Figtree, Arial";
   ctx.fillStyle = "#ffffff";
   ctx.fillText(r.title, padX, curY);
-  curY += titleFontSize + 16;
+  curY += titleFontSize + 20;
 
-  ctx.font = "bold 28px Arial";
-  var subMeasure = ctx.measureText(r.subtitle).width;
-  ctx.fillStyle = "rgba(0,185,159,0.22)";
-  roundRect(ctx, padX, curY, subMeasure + 48, 52, 26);
-  ctx.fill();
+  // Subtitle pill — outlined teal border
+  ctx.font = "bold 34px Figtree, Arial";
+  var subW = ctx.measureText(r.subtitle).width + 56;
+  var pillH = 60;
   ctx.strokeStyle = "#00b99f";
-  ctx.lineWidth = 2;
-  roundRect(ctx, padX, curY, subMeasure + 48, 52, 26);
+  ctx.lineWidth = 3;
+  roundRect(ctx, padX, curY, subW, pillH, 30);
   ctx.stroke();
   ctx.fillStyle = "#00b99f";
-  ctx.fillText(r.subtitle, padX + 24, curY + 34);
-  curY += 52 + 60;
+  ctx.fillText(r.subtitle, padX + 28, curY + 40);
+  curY += pillH + 56;
 
-  var divGrad = ctx.createLinearGradient(padX, 0, padX + 400, 0);
-  divGrad.addColorStop(0, "#640b9b");
-  divGrad.addColorStop(1, "#00b99f");
-  ctx.strokeStyle = divGrad;
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.moveTo(padX, curY);
-  ctx.lineTo(padX + 400, curY);
-  ctx.stroke();
-  curY += 50;
-
-  ctx.font = "400 34px Arial";
-  ctx.fillStyle = "rgba(255,255,255,0.85)";
+  // Description text
+  ctx.font = "400 34px Figtree, Arial";
+  ctx.fillStyle = "rgba(255,255,255,0.90)";
   var desc = r.desc;
-  if (desc.length > 180) { desc = desc.substring(0, 177) + "..."; }
+  if (desc.length > 200) { desc = desc.substring(0, 197) + "..."; }
   var nLines = wrapText(ctx, desc, padX, curY, W - padX * 2, 52);
-  curY += nLines * 52 + 60;
+  curY += nLines * 52 + 56;
 
-  ctx.font = "bold 28px Arial";
-  ctx.fillStyle = "rgba(255,255,255,0.45)";
+  // Thinkers box — #caa8f5 background
+  var boxPad = 36;
+  var boxX = padX;
+  var boxY = curY;
+  var boxW = W - padX * 2;
+  var lineH2 = 50;
+  var boxH = boxPad * 2 + 44 + r.thinkers.length * lineH2;
+  ctx.fillStyle = "#caa8f5";
+  roundRect(ctx, boxX, boxY, boxW, boxH, 20);
+  ctx.fill();
+
+  // Box title
+  ctx.font = "bold 28px Figtree, Arial";
+  ctx.fillStyle = "#2d0060";
   ctx.textAlign = "left";
-  ctx.fillText("Faca o teste: a-livres.github.io/tipos-de-liberais", padX, H - 80);
+  ctx.fillText("Pensadores de referência", boxX + boxPad, boxY + boxPad + 24);
+
+  // Thinker names
+  ctx.font = "400 30px Figtree, Arial";
+  ctx.fillStyle = "#3d006e";
+  r.thinkers.forEach(function(t, i) {
+    ctx.fillText("· " + t.name, boxX + boxPad, boxY + boxPad + 24 + 44 + i * lineH2);
+  });
+  curY += boxH + 0;
+
+  // Bottom URL
+  ctx.font = "bold 26px Figtree, Arial";
+  ctx.fillStyle = "rgba(255,255,255,0.55)";
+  ctx.textAlign = "left";
+  ctx.fillText("Faça o teste: a-livres.github.io/tipos-de-liberais/", padX, H - 56);
 
   ctx.fillStyle = "#00b99f";
   ctx.textAlign = "right";
-  ctx.fillText("Quiz Liberal · Livres", W - padX, H - 80);
+  ctx.fillText("Quiz Liberal · Livres", W - padX, H - 56);
 
   var link = document.createElement("a");
-  link.download = "meu-perfil-liberal-" + format + ".png";
+  link.download = "meu-perfil-liberal.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
