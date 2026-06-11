@@ -255,7 +255,7 @@ const results = {
     title: "Liberal Conservador",
     subtitle: "Cético e Gradualista",
     desc: "Você defende uma economia de livre mercado combinada com uma organização social próxima que valoriza a vida comunitária, instituições sólidas e mudanças graduais. É cético quanto ao poder transformador do Estado e atento à tirania da maioria. Mantém vínculos nacionais sem negar a cooperação internacional.",
-    tags: ["Livre mercado", "Instituições sólidas", "Prudência", "Comunitarismo", "Soberania nacional"],
+    tags: ["Livre mercado", "Instituições sólidas", "Prudência", "Soberania nacional"],
     thinkers: [
       { name: "Lord Acton", desc: "Formulou que todo poder corrompe e o poder absoluto corrompe absolutamente, defendendo limites institucionais ao poder do Estado e da maioria. Leia: The History of Freedom (1877)" },
       { name: "Alexis de Tocqueville", desc: "Analisou os riscos da tirania da maioria e a importância das instituições intermediárias para a liberdade democrática. Leia: A Democracia na América (1835)" },
@@ -502,7 +502,6 @@ function downloadImage(format) {
     ctx.font = "400 33px Figtree, Arial";
     ctx.fillStyle = "rgba(255,255,255,0.90)";
     var desc = r.desc;
-    if (desc.length > 240) { desc = desc.substring(0, 237) + "..."; }
     var nLines = wrapText(ctx, desc, padX, curY, W - padX * 2, 52);
     curY += nLines * 52 + 72;
 
