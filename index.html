@@ -123,7 +123,7 @@
     <div class="share-section">
       <div class="share-title">Compartilhar resultado</div>
       <div class="share-btns">
-        <button class="share-btn share-btn-square" onclick="downloadImage('square')">⬇ Baixar 1080×1080</button>
+        <button class="share-btn share-btn-square" onclick="downloadImage('square')">⬇ Baixar imagem</button>
       </div>
     </div>
         <button class="restart-btn" onclick="location.reload()">↺ &nbsp;Refazer o quiz</button>
@@ -254,7 +254,7 @@ const results = {
   B: {
     title: "Liberal Conservador",
     subtitle: "Cético e Gradualista",
-    desc: "Você defende uma economia de livre mercado combinada com uma organização social próxima ao comunitarismo. Valoriza instituições sólidas e mudanças graduais. É cético quanto ao poder transformador do Estado e atento à tirania da maioria. Mantém vínculos nacionais sem negar a cooperação internacional.",
+    desc: "Você defende uma economia de livre mercado combinada com uma organização social próxima que valoriza a vida comunitária, instituições sólidas e mudanças graduais. É cético quanto ao poder transformador do Estado e atento à tirania da maioria. Mantém vínculos nacionais sem negar a cooperação internacional.",
     tags: ["Livre mercado", "Instituições sólidas", "Prudência", "Comunitarismo", "Soberania nacional"],
     thinkers: [
       { name: "Lord Acton", desc: "Formulou que todo poder corrompe e o poder absoluto corrompe absolutamente, defendendo limites institucionais ao poder do Estado e da maioria. Leia: The History of Freedom (1877)" },
@@ -442,7 +442,7 @@ var LOGO_B64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAABQCAYAAADC8m
 function downloadImage(format) {
   var r = results[winnerKey];
   var W = 1080;
-  var H = 1080;
+  var H = 1440;
   var canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
@@ -451,99 +451,113 @@ function downloadImage(format) {
   var logoImg2 = new Image();
   logoImg2.onload = function() {
 
+    // Background
     ctx.fillStyle = "#640b9b";
     ctx.fillRect(0, 0, W, H);
 
     var padX = 72;
-    var padY = 72;
 
-    // Logo centrada
-    var logoW = 160;
-    var logoH = 46;
-    ctx.drawImage(logoImg2, (W - logoW) / 2, padY, logoW, logoH);
+    // ── Logo centrada no topo ────────────────────────────────
+    var logoW = 170;
+    var logoH = 48;
+    ctx.drawImage(logoImg2, (W - logoW) / 2, 72, logoW, logoH);
 
-    // Título
-    var titleY = padY + logoH + 64;
-    var titleFS = r.title.length > 16 ? 78 : r.title.length > 12 ? 90 : 100;
+    // ── "Descobri que sou..." ────────────────────────────────
+    var curY = 72 + logoH + 72;
+    ctx.font = "400 36px Figtree, Arial";
+    ctx.fillStyle = "rgba(255,255,255,0.60)";
+    ctx.textAlign = "left";
+    ctx.fillText("Descobri que sou...", padX, curY);
+    curY += 60;
+
+    // ── Título do perfil ─────────────────────────────────────
+    var titleFS = r.title.length > 16 ? 80 : r.title.length > 12 ? 96 : 108;
     ctx.font = "900 " + titleFS + "px Figtree, Arial";
     ctx.fillStyle = "#ffffff";
-    ctx.textAlign = "left";
-    ctx.fillText(r.title, padX, titleY);
+    ctx.fillText(r.title, padX, curY + titleFS * 0.8);
+    curY += titleFS + 28;
 
-    // Pílula subtítulo
-    var pillY = titleY + 28;
-    ctx.font = "600 30px Figtree, Arial";
-    var subW = ctx.measureText(r.subtitle).width + 48;
-    var pillH = 54;
+    // ── Pílula subtítulo ─────────────────────────────────────
+    ctx.font = "500 32px Figtree, Arial";
+    var subW = ctx.measureText(r.subtitle).width + 52;
+    var pillH = 58;
     ctx.strokeStyle = "#00b99f";
     ctx.lineWidth = 2.5;
-    roundRect(ctx, padX, pillY, subW, pillH, 27);
+    roundRect(ctx, padX, curY, subW, pillH, 29);
     ctx.stroke();
     ctx.fillStyle = "#00b99f";
-    ctx.fillText(r.subtitle, padX + 24, pillY + 36);
+    ctx.fillText(r.subtitle, padX + 26, curY + 38);
+    curY += pillH + 52;
 
-    // Linha divisória
-    var lineY = pillY + pillH + 40;
-    ctx.strokeStyle = "rgba(255,255,255,0.18)";
+    // ── Linha divisória ──────────────────────────────────────
+    ctx.strokeStyle = "rgba(255,255,255,0.20)";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(padX, lineY);
-    ctx.lineTo(W - padX, lineY);
+    ctx.moveTo(padX, curY);
+    ctx.lineTo(padX + 280, curY);
     ctx.stroke();
+    curY += 52;
 
-    // Descrição
-    var descY = lineY + 48;
-    ctx.font = "400 31px Figtree, Arial";
-    ctx.fillStyle = "rgba(255,255,255,0.88)";
+    // ── Descrição ────────────────────────────────────────────
+    ctx.font = "400 33px Figtree, Arial";
+    ctx.fillStyle = "rgba(255,255,255,0.90)";
     var desc = r.desc;
-    if (desc.length > 160) { desc = desc.substring(0, 157) + "..."; }
-    wrapText(ctx, desc, padX, descY, W - padX * 2, 48);
+    if (desc.length > 240) { desc = desc.substring(0, 237) + "..."; }
+    var nLines = wrapText(ctx, desc, padX, curY, W - padX * 2, 52);
+    curY += nLines * 52 + 72;
 
-    // Caixa pensadores — ancorada no rodapé
-    var bPad = 32;
-    var rowH = 82;
+    // ── Caixa pensadores ─────────────────────────────────────
+    var bPad = 40;
+    var rowH = 92;
     var boxW = W - padX * 2;
-    var boxH = bPad + 36 + r.thinkers.length * rowH + bPad;
+    var boxH = bPad + 40 + r.thinkers.length * rowH + bPad - 12;
     var boxX = padX;
-    var boxY = H - padY - 50 - boxH;
+    var boxY = curY;
 
     ctx.fillStyle = "#caa8f5";
-    roundRect(ctx, boxX, boxY, boxW, boxH, 18);
+    roundRect(ctx, boxX, boxY, boxW, boxH, 24);
     ctx.fill();
 
-    ctx.font = "700 24px Figtree, Arial";
+    // Título da caixa
+    ctx.font = "700 26px Figtree, Arial";
     ctx.fillStyle = "#3d007a";
     ctx.textAlign = "left";
     ctx.fillText("Pensadores de referência", boxX + bPad, boxY + bPad + 20);
 
+    // Separador interno
     ctx.strokeStyle = "rgba(100,11,155,0.15)";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(boxX + bPad, boxY + bPad + 34);
-    ctx.lineTo(boxX + boxW - bPad, boxY + bPad + 34);
+    ctx.moveTo(boxX + bPad, boxY + bPad + 36);
+    ctx.lineTo(boxX + boxW - bPad, boxY + bPad + 36);
     ctx.stroke();
 
+    // Pensadores
     r.thinkers.forEach(function(t, i) {
-      var ty = boxY + bPad + 34 + 20 + i * rowH;
-      ctx.font = "700 26px Figtree, Arial";
+      var ty = boxY + bPad + 36 + 24 + i * rowH;
+      ctx.font = "700 28px Figtree, Arial";
       ctx.fillStyle = "#2d0060";
       ctx.fillText(t.name, boxX + bPad, ty + 24);
       var bookMatch = t.desc.match(/Leia: (.+)$/);
       if (bookMatch) {
-        ctx.font = "400 22px Figtree, Arial";
+        ctx.font = "400 23px Figtree, Arial";
         ctx.fillStyle = "#5a0099";
-        ctx.fillText("📖  " + bookMatch[1], boxX + bPad, ty + 54);
+        ctx.fillText("📖  " + bookMatch[1], boxX + bPad, ty + 58);
       }
     });
 
-    // Rodapé
-    ctx.font = "400 22px Figtree, Arial";
-    ctx.fillStyle = "rgba(255,255,255,0.40)";
+    curY = boxY + boxH;
+
+    // ── Rodapé ───────────────────────────────────────────────
+    var footY = H - 60;
+    ctx.font = "400 24px Figtree, Arial";
+    ctx.fillStyle = "rgba(255,255,255,0.45)";
     ctx.textAlign = "left";
-    ctx.fillText("a-livres.github.io/tipos-de-liberais/", padX, H - padY + 12);
+    ctx.fillText("a-livres.github.io/tipos-de-liberais/", padX, footY);
+
     ctx.fillStyle = "#00b99f";
     ctx.textAlign = "right";
-    ctx.fillText("Quiz Liberal · Livres", W - padX, H - padY + 12);
+    ctx.fillText("Quiz Liberal · Livres", W - padX, footY);
 
     var link = document.createElement("a");
     link.download = "meu-perfil-liberal.png";
