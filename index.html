@@ -246,9 +246,9 @@ const results = {
     desc: "Você defende uma economia de mercado com regulações e programas sociais abrangentes para mitigar desigualdades. Acredita que a liberdade real exige condições materiais mínimas e que o Estado tem papel legítimo em garantir saúde, educação e direitos civis expandidos. Apoia pautas progressistas e cooperação internacional democrática.",
     tags: ["Welfare state", "Direitos civis", "Regulação de mercados", "Progressismo", "Cooperação internacional"],
     thinkers: [
-      { name: "John Stuart Mill", desc: "Defensor da liberdade individual e da autonomia como princípio central da vida pública e da democracia." },
-      { name: "John Rawls", desc: "Formulou a teoria da justiça como equidade, defendendo que desigualdades só são aceitáveis se beneficiam os menos favorecidos." },
-      { name: "Amartya Sen", desc: "Revolucionou o debate sobre desenvolvimento ao defender que a liberdade consiste na capacidade das pessoas de viver a vida que valorizam." }
+      { name: "John Stuart Mill", desc: "Defensor da liberdade individual e da autonomia como princípio central da vida pública e da democracia. Leia: Sobre a Liberdade (1859)" },
+      { name: "John Rawls", desc: "Formulou a teoria da justiça como equidade, defendendo que desigualdades só são aceitáveis se beneficiam os menos favorecidos. Leia: Uma Teoria da Justiça (1971)" },
+      { name: "Amartya Sen", desc: "Revolucionou o debate sobre desenvolvimento ao defender que a liberdade consiste na capacidade das pessoas de viver a vida que valorizam. Leia: Desenvolvimento como Liberdade (1999)" }
     ]
   },
   B: {
@@ -257,9 +257,9 @@ const results = {
     desc: "Você defende uma economia de livre mercado combinada com uma organização social próxima ao comunitarismo. Valoriza instituições sólidas e mudanças graduais. É cético quanto ao poder transformador do Estado e atento à tirania da maioria. Mantém vínculos nacionais sem negar a cooperação internacional.",
     tags: ["Livre mercado", "Instituições sólidas", "Prudência", "Comunitarismo", "Soberania nacional"],
     thinkers: [
-      { name: "Lord Acton", desc: "Formulou que todo poder corrompe e o poder absoluto corrompe absolutamente, defendendo limites institucionais ao poder do Estado e da maioria." },
-      { name: "Alexis de Tocqueville", desc: "Analisou os riscos da tirania da maioria e a importância das instituições intermediárias para a liberdade democrática." },
-      { name: "Wilhelm Röpke", desc: "Um dos arquitetos da economia social de mercado, defendia que mercados livres dependem de uma base moral, cultural e comunitária sólida para funcionar." }
+      { name: "Lord Acton", desc: "Formulou que todo poder corrompe e o poder absoluto corrompe absolutamente, defendendo limites institucionais ao poder do Estado e da maioria. Leia: The History of Freedom (1877)" },
+      { name: "Alexis de Tocqueville", desc: "Analisou os riscos da tirania da maioria e a importância das instituições intermediárias para a liberdade democrática. Leia: A Democracia na América (1835)" },
+      { name: "Wilhelm Röpke", desc: "Um dos arquitetos da economia social de mercado, defendia que mercados livres dependem de uma base moral, cultural e comunitária sólida para funcionar. Leia: A Sociedade Humana (1944)" }
     ]
   },
   C: {
@@ -268,9 +268,9 @@ const results = {
     desc: "Você defende uma economia laissez-faire com forte ceticismo à atuação do Estado para promover liberdade ou igualdade. Prioriza liberdades negativas e individuais, entendendo que o Estado não deve interferir na vida pessoal nem econômica. Prefere soluções voluntárias e de mercado ao combate às desigualdades.",
     tags: ["Laissez-faire", "Liberdade negativa", "Estado mínimo", "Voluntarismo", "Propriedade privada"],
     thinkers: [
-      { name: "Ludwig von Mises", desc: "Um dos maiores representantes da Escola Austríaca, argumentou que a coordenação econômica depende da propriedade privada e dos preços de mercado." },
-      { name: "Robert Nozick", desc: "Em Anarquia, Estado e Utopia, defendeu que os indivíduos possuem direitos invioláveis que limitam estritamente a ação do Estado." },
-      { name: "David Friedman", desc: "Desenvolveu uma das mais influentes defesas contemporâneas do voluntarismo, argumentando que muitos serviços do Estado podem ser providos voluntariamente pelo mercado." }
+      { name: "Ludwig von Mises", desc: "Um dos maiores representantes da Escola Austríaca, argumentou que a coordenação econômica depende da propriedade privada e dos preços de mercado. Leia: Ação Humana (1949)" },
+      { name: "Robert Nozick", desc: "Em Anarquia, Estado e Utopia, defendeu que os indivíduos possuem direitos invioláveis que limitam estritamente a ação do Estado. Leia: Anarquia, Estado e Utopia (1974)" },
+      { name: "David Friedman", desc: "Desenvolveu uma das mais influentes defesas contemporâneas do voluntarismo, argumentando que muitos serviços do Estado podem ser providos voluntariamente pelo mercado. Leia: A Máquina da Liberdade (1973)" }
     ]
   }
 };
@@ -448,80 +448,103 @@ function downloadImage(format) {
   canvas.height = H;
   var ctx = canvas.getContext("2d");
 
-  // Background #640b9b
-  ctx.fillStyle = "#640b9b";
-  ctx.fillRect(0, 0, W, H);
-
-  var padX = 80;
-  var curY = 90;
-
-  curY += 90; // logo drawn via onload
-
-  // Profile title
-  var titleFontSize = r.title.length > 14 ? 90 : 110;
-  ctx.font = "900 " + titleFontSize + "px Figtree, Arial";
-  ctx.fillStyle = "#ffffff";
-  ctx.fillText(r.title, padX, curY);
-  curY += titleFontSize + 20;
-
-  // Subtitle pill — outlined teal border
-  ctx.font = "bold 34px Figtree, Arial";
-  var subW = ctx.measureText(r.subtitle).width + 56;
-  var pillH = 60;
-  ctx.strokeStyle = "#00b99f";
-  ctx.lineWidth = 3;
-  roundRect(ctx, padX, curY, subW, pillH, 30);
-  ctx.stroke();
-  ctx.fillStyle = "#00b99f";
-  ctx.fillText(r.subtitle, padX + 28, curY + 40);
-  curY += pillH + 56;
-
-  // Description text
-  ctx.font = "400 34px Figtree, Arial";
-  ctx.fillStyle = "rgba(255,255,255,0.90)";
-  var desc = r.desc;
-  if (desc.length > 200) { desc = desc.substring(0, 197) + "..."; }
-  var nLines = wrapText(ctx, desc, padX, curY, W - padX * 2, 52);
-  curY += nLines * 52 + 56;
-
-  // Thinkers box — #caa8f5 background
-  var boxPad = 36;
-  var boxX = padX;
-  var boxY = curY;
-  var boxW = W - padX * 2;
-  var lineH2 = 50;
-  var boxH = boxPad * 2 + 44 + r.thinkers.length * lineH2;
-  ctx.fillStyle = "#caa8f5";
-  roundRect(ctx, boxX, boxY, boxW, boxH, 20);
-  ctx.fill();
-
-  // Box title
-  ctx.font = "bold 28px Figtree, Arial";
-  ctx.fillStyle = "#2d0060";
-  ctx.textAlign = "left";
-  ctx.fillText("Pensadores de referência", boxX + boxPad, boxY + boxPad + 24);
-
-  // Thinker names
-  ctx.font = "400 30px Figtree, Arial";
-  ctx.fillStyle = "#3d006e";
-  r.thinkers.forEach(function(t, i) {
-    ctx.fillText("· " + t.name, boxX + boxPad, boxY + boxPad + 24 + 44 + i * lineH2);
-  });
-  curY += boxH + 0;
-
-  // Bottom URL
-  ctx.font = "bold 26px Figtree, Arial";
-  ctx.fillStyle = "rgba(255,255,255,0.55)";
-  ctx.textAlign = "left";
-  ctx.fillText("Faça o teste: a-livres.github.io/tipos-de-liberais/", padX, H - 56);
-
-  ctx.fillStyle = "#00b99f";
-  ctx.textAlign = "right";
-  ctx.fillText("Quiz Liberal · Livres", W - padX, H - 56);
-
   var logoImg2 = new Image();
   logoImg2.onload = function() {
-    ctx.drawImage(logoImg2, padX, 20, 245, 70);
+
+    ctx.fillStyle = "#640b9b";
+    ctx.fillRect(0, 0, W, H);
+
+    var padX = 72;
+    var padY = 72;
+
+    // Logo centrada
+    var logoW = 160;
+    var logoH = 46;
+    ctx.drawImage(logoImg2, (W - logoW) / 2, padY, logoW, logoH);
+
+    // Título
+    var titleY = padY + logoH + 64;
+    var titleFS = r.title.length > 16 ? 78 : r.title.length > 12 ? 90 : 100;
+    ctx.font = "900 " + titleFS + "px Figtree, Arial";
+    ctx.fillStyle = "#ffffff";
+    ctx.textAlign = "left";
+    ctx.fillText(r.title, padX, titleY);
+
+    // Pílula subtítulo
+    var pillY = titleY + 28;
+    ctx.font = "600 30px Figtree, Arial";
+    var subW = ctx.measureText(r.subtitle).width + 48;
+    var pillH = 54;
+    ctx.strokeStyle = "#00b99f";
+    ctx.lineWidth = 2.5;
+    roundRect(ctx, padX, pillY, subW, pillH, 27);
+    ctx.stroke();
+    ctx.fillStyle = "#00b99f";
+    ctx.fillText(r.subtitle, padX + 24, pillY + 36);
+
+    // Linha divisória
+    var lineY = pillY + pillH + 40;
+    ctx.strokeStyle = "rgba(255,255,255,0.18)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(padX, lineY);
+    ctx.lineTo(W - padX, lineY);
+    ctx.stroke();
+
+    // Descrição
+    var descY = lineY + 48;
+    ctx.font = "400 31px Figtree, Arial";
+    ctx.fillStyle = "rgba(255,255,255,0.88)";
+    var desc = r.desc;
+    if (desc.length > 160) { desc = desc.substring(0, 157) + "..."; }
+    wrapText(ctx, desc, padX, descY, W - padX * 2, 48);
+
+    // Caixa pensadores — ancorada no rodapé
+    var bPad = 32;
+    var rowH = 82;
+    var boxW = W - padX * 2;
+    var boxH = bPad + 36 + r.thinkers.length * rowH + bPad;
+    var boxX = padX;
+    var boxY = H - padY - 50 - boxH;
+
+    ctx.fillStyle = "#caa8f5";
+    roundRect(ctx, boxX, boxY, boxW, boxH, 18);
+    ctx.fill();
+
+    ctx.font = "700 24px Figtree, Arial";
+    ctx.fillStyle = "#3d007a";
+    ctx.textAlign = "left";
+    ctx.fillText("Pensadores de referência", boxX + bPad, boxY + bPad + 20);
+
+    ctx.strokeStyle = "rgba(100,11,155,0.15)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(boxX + bPad, boxY + bPad + 34);
+    ctx.lineTo(boxX + boxW - bPad, boxY + bPad + 34);
+    ctx.stroke();
+
+    r.thinkers.forEach(function(t, i) {
+      var ty = boxY + bPad + 34 + 20 + i * rowH;
+      ctx.font = "700 26px Figtree, Arial";
+      ctx.fillStyle = "#2d0060";
+      ctx.fillText(t.name, boxX + bPad, ty + 24);
+      var bookMatch = t.desc.match(/Leia: (.+)$/);
+      if (bookMatch) {
+        ctx.font = "400 22px Figtree, Arial";
+        ctx.fillStyle = "#5a0099";
+        ctx.fillText("📖  " + bookMatch[1], boxX + bPad, ty + 54);
+      }
+    });
+
+    // Rodapé
+    ctx.font = "400 22px Figtree, Arial";
+    ctx.fillStyle = "rgba(255,255,255,0.40)";
+    ctx.textAlign = "left";
+    ctx.fillText("a-livres.github.io/tipos-de-liberais/", padX, H - padY + 12);
+    ctx.fillStyle = "#00b99f";
+    ctx.textAlign = "right";
+    ctx.fillText("Quiz Liberal · Livres", W - padX, H - padY + 12);
+
     var link = document.createElement("a");
     link.download = "meu-perfil-liberal.png";
     link.href = canvas.toDataURL("image/png");
