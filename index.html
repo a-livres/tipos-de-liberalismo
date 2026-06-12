@@ -69,12 +69,21 @@
   .restart-btn:hover { opacity: 0.9; transform: translateY(-2px); }
   @media (max-width: 600px) { #quiz-container { padding: 36px 22px; } .email-input-wrap { flex-direction: column; } .email-submit-btn { width: 100%; } }
 
-  .share-section { margin-bottom: 28px; }
-  .share-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 14px; text-align: center; }
-  .share-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 20px; border: none; border-radius: 10px; font-family: "Figtree", sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.2s; }
+  .share-section { margin-bottom: 32px; padding: 24px 0; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; }
+  .share-row { display: flex; align-items: center; justify-content: center; gap: 0; }
+  .share-col { display: flex; flex-direction: column; align-items: center; gap: 14px; flex: 1; }
+  .share-divider { width: 1px; height: 64px; background: #e8e8e8; margin: 0 24px; flex-shrink: 0; }
+  .share-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #aaa; text-align: center; }
+  .share-btns { display: flex; gap: 12px; justify-content: center; align-items: center; }
+  .share-btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 20px; border: none; border-radius: 10px; font-family: "Figtree", sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.2s; }
   .share-btn:hover { opacity: 0.88; transform: translateY(-2px); }
-  .share-btn-square { background: linear-gradient(135deg, var(--purple), var(--purple-light)); color: #fff; box-shadow: 0 4px 14px rgba(100,11,155,0.25); }
+  .share-btn-square { background: linear-gradient(135deg, var(--purple), var(--purple-light)); color: #fff; box-shadow: 0 4px 14px rgba(100,11,155,0.25); min-width: 52px; }
+  .share-social-btns { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; }
+  .share-social-btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 18px; border: none; border-radius: 10px; font-family: "Figtree", sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.2s; color: #fff; }
+  .share-social-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+  .btn-whatsapp { background: #25D366; }
+  .btn-x        { background: #000000; }
+  @media (max-width: 480px) { .share-divider { margin: 0 16px; } .share-social-btn { padding: 10px 14px; font-size: 0.82rem; } }
 
 </style>
 </head>
@@ -82,7 +91,7 @@
 <div id="quiz-container">
   <div id="quiz-ui">
     <div class="quiz-header">
-      <div class="quiz-eyebrow">Livres · Associação Liberal</div>
+      <div class="quiz-eyebrow">Livres</div>
       <h1>Qual tipo de <span>liberal</span> você é?</h1>
     </div>
     <div class="progress-wrap">
@@ -121,9 +130,25 @@
       <div id="thinkers-list"></div>
     </div>
     <div class="share-section">
-      <div class="share-title">Compartilhar resultado</div>
-      <div class="share-btns">
-        <button class="share-btn share-btn-square" onclick="downloadImage('square')">⬇ Baixar imagem</button>
+      <div class="share-row">
+        <div class="share-col">
+          <div class="share-title">Baixar imagem</div>
+          <button class="share-btn share-btn-square" onclick="downloadImage('square')">⬇</button>
+        </div>
+        <div class="share-divider"></div>
+        <div class="share-col">
+          <div class="share-title">Compartilhar nas redes</div>
+          <div class="share-social-btns">
+            <button class="share-social-btn btn-whatsapp" onclick="shareWhatsApp()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.528 5.847L0 24l6.335-1.508A11.933 11.933 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.214-3.732.888.935-3.618-.235-.372A9.818 9.818 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/></svg>
+              WhatsApp
+            </button>
+            <button class="share-social-btn btn-x" onclick="shareX()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              X
+            </button>
+          </div>
+        </div>
       </div>
     </div>
         <button class="restart-btn" onclick="location.reload()">↺ &nbsp;Refazer o quiz</button>
@@ -564,6 +589,22 @@ function downloadImage(format) {
     link.click();
   };
   logoImg2.src = LOGO_B64;
+}
+
+
+function getShareText() {
+  var r = results[winnerKey];
+  return "Fiz o Quiz Tipos de Liberais do Livres e descobri que sou " + r.title + " (" + r.subtitle + ")! Faça o teste: eusoulivres.org/tiposdeliberal";
+}
+
+function shareWhatsApp() {
+  var text = encodeURIComponent(getShareText());
+  window.open("https://wa.me/?text=" + text, "_blank");
+}
+
+function shareX() {
+  var text = encodeURIComponent(getShareText());
+  window.open("https://x.com/intent/tweet?text=" + text, "_blank");
 }
 
 
